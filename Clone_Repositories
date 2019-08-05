@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+
+# This script loops through a list of matching directories and clones the repositories from github.
+# They are hosted at: https://github.com/learn-co-students/NAME_OF_DIRECTORY
+# N.B.: We need to set up SSH for this to work; else github asks us for a USER_ID and PASSWORD...
+
+# First, we declare our variables:
+targetParentDir="/home/george/Documents/Flatiron/Learnco/"
+
+# Then we loop through the input file list and clone matching repo's from github:
+while IFS= read -r line; do
+    cd "$targetParentDir"
+        if test -f ./.git; then
+            printf "Woah, we already have a .git file here!  Aborting.\n"
+            break
+        else
+	    git clone git@github.com:learn-co-students/"$line".git
+	    cd ./"$line"/
+	    git init
+	    git add .
+	    hub fork
+	    git remote set-url origin https://georgehaws:5af5825fa8dd42b75d13fd0654a6d0c33848ff0c@github.com/georgehaws/"$line".git
+	    git remote add upstream https://github.com/learn-co-students/"$line".git
+	    cd ..
+        fi
+    done < "$1"

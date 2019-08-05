@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+# This script updates all remote repositories in a matching text file.
+# Its purpose is to change git remote origin from https:// to ssh protocol.
+
+targetParentDir="/home/george/Documents/Flatiron/Learnco/"
+
+# we loop through the input file list and clone matching repo's from github:
+cd "$targetParentDir"
+while IFS= read -r line; do
+    cd ./"$line"/
+        git remote set-url origin git@github.com:georgehaws/"$line".git
+	git remote remove georgehaws
+	cd ..
+    done < "$1"

@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+
+# This shell script loops through a list of raw data from the internet and throws out lines that we dislike.
+
+# First, we declare our file paths as variables:
+readFile="$1" #(i.e. this is the first argument we pass to the shell from the command line.)
+writeFile="/home/george/Documents/Flatiron/Learnco/Clean_Lab_Data_071519"
+
+# Then, we check to make sure the input file exists:
+
+if test -f "$readFile"; then
+        printf "readFile located.  Continuing...\n"
+    else
+        printf "readFile not found.  Create readFile and try again.\n"
+    break
+    fi
+
+# Finally, we checks to see if output file exists.
+# If it doesn't, we create one.
+# Then, we loop over the input file and append only the desired lines of text to the output file: 
+if test -f "$writeFile"; then
+    printf "writeFile located.  Overwriting...\n"
+        > "$writeFile"
+	while IFS= read -r line; do
+            if [[ $line == *dc-ds-071519 ]];
+                then
+                    printf '%s\n' "$line" >> $writeFile
+	        fi
+        done < "$1"
+    else
+    printf "writeFile not found.  Creating new writeFile...\n"
+    touch $writeFile
+        while IFS= read -r line; do
+            if [[ $line == *dc-ds-071519 ]];
+                then
+                    printf '%s\n' "$line" >> $writeFile
+	        fi
+            done < "$1"
+    fi
